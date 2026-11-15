@@ -1,0 +1,7 @@
+node_modules/
+dist/
+*.png
+.DS_Store
+/public/reference/lighting.pdf
+/UI-IMPROVEMENT-TASKS.md
+/UX-IMPROVEMENT-TASKS.md
