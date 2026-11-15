@@ -321,6 +321,7 @@ export function Timeline({department, onDepartment, markers, onMarker, animation
   const playhead=visible(time)&&<span className="timeline-playhead" style={{left:percent(time)}} aria-hidden="true"/>;
   const cueTime=snap(time);
   const lightingCue=lighting?.cues.find(cue=>cue.time===time);
+  const editableCue=playing ? undefined : lightingCue;
   const canRecord=lighting?.pendingCount>0&&!playing&&cueTime>0&&cueTime<=MAX_KEY_TIME;
   function alignTime(value,width){
     if(!lighting || !snapToCues)return snap(value);
@@ -352,11 +353,22 @@ export function Timeline({department, onDepartment, markers, onMarker, animation
       </div>
     </div>
     {lighting&&<div className="lighting-timeline-actions">
-      <button type="button" onClick={lighting.onOpening} disabled={playing} title={`LX ${lighting.openingNumber} · Opening look`}>Opening look</button>
-      <button type="button" onClick={lighting.onRecord} disabled={!canRecord}
-        title="Save pending dimmer changes at the playhead">Record lighting cue</button>
-      <button type="button" className="lighting-export-action" onClick={lighting.onExport} disabled={playing}>Export lighting…</button>
-      <label><input type="checkbox" checked={snapToCues} onChange={event=>setSnapToCues(event.target.checked)}/>Snap to GO</label>
+      <div className="lighting-timeline-tools">
+        <button type="button" onClick={lighting.onOpening} disabled={playing} title={`LX ${lighting.openingNumber} · Opening look`}>Opening look</button>
+        <button type="button" onClick={lighting.onRecord} disabled={!canRecord}
+          title="Save pending dimmer changes at the playhead">Record lighting cue</button>
+        <label><input type="checkbox" checked={snapToCues} onChange={event=>setSnapToCues(event.target.checked)}/>Snap to GO</label>
+      </div>
+      <form key={editableCue ? `${editableCue.time}:${editableCue.label}` : 'unselected'} className="lighting-go-edit" onSubmit={event=>{
+        event.preventDefault();
+        if(editableCue)lighting.onRename(editableCue,new FormData(event.currentTarget).get('label'));
+      }}>
+        <label><span>Cue label</span><input name="label" aria-label="Cue label" defaultValue={editableCue?.label??''}
+          placeholder="Select a GO" maxLength={60} disabled={!editableCue}/></label>
+        <button type="submit" disabled={!editableCue}>Save label</button>
+        <button type="button" className="remove-lighting-go" disabled={!editableCue} onClick={()=>lighting.onRemove(editableCue)}
+          title="Remove the GO and keep its keyframes">Remove GO marker</button>
+      </form>
     </div>}
     <div className="timeline-options">
       {department==='blocking'&&rows.length>0&&<label>Property <select value={blockingProperty} onChange={event=>onBlockingProperty(event.target.value)}>
@@ -451,15 +463,6 @@ export function Timeline({department, onDepartment, markers, onMarker, animation
           min={start} max={end} step="0.1" value={Math.min(end,Math.max(start,time))} onChange={event => seek(Number(event.target.value))}/>
       </div>
     </div>
-    {lightingCue&&!playing&&<form key={`${lightingCue.time}:${lightingCue.label}`} className="lighting-go-edit" onSubmit={event=>{
-      event.preventDefault();
-      lighting.onRename(lightingCue,new FormData(event.currentTarget).get('label'));
-    }}>
-      <label>Cue label <input name="label" defaultValue={lightingCue.label} maxLength={60}/></label>
-      <button type="submit">Save label</button>
-      <button type="button" className="remove-lighting-go" onClick={()=>lighting.onRemove(lightingCue)}
-        title={`Remove the GO at ${formatTime(lightingCue.time)} and keep its keyframes`}>Remove GO marker</button>
-    </form>}
     <KeyframeToolbar animation={animation} playing={playing} clock={clock} time={time}/>
     <PendingKeyframes {...{pending,resolution,onCancelResolution,onResolve,onSavePending,onDiscardPending,pendingLabel,onPendingJump}}/>
     <TabList className="department-tabs" tabs={DEPARTMENTS} active={department} onChange={onDepartment}

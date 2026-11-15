@@ -753,6 +753,8 @@ function Workspace({project,projects,editProject,onHistory,undoTarget,redoTarget
     {departmentId==='lighting'&&activeLight&&aimLight===null&&<div className="viewport-bottom"><span className="selected-chip">{activeLight.name||`L${activeLight.id}`}</span></div>}
    </section>
    <Inspector department={department} active={inspectorTab} onChange={showTab} warnings={alerts} entities={entities} onStage={showStage}
+    headerAction={departmentId==='lighting'&&<button type="button" className="primary lighting-export-action"
+     onClick={openLightingExport} disabled={transport.playing}>Export lighting…</button>}
     standalone={departmentId==='lighting'?{id:'room',tabId:'lighting-entity-tab-room'}:undefined}
     onWarning={issue=>{
      selectSetItem(issue.id);showTab(issue.tab,'set');
@@ -776,7 +778,7 @@ function Workspace({project,projects,editProject,onHistory,undoTarget,redoTarget
     lighting={departmentId==='lighting' ? {
      cues:lightingGos,openingNumber:lightingPlan[0].number,
      pendingCount:pendingDimmers.length,onRecord:()=>saveDrafts(pendingDimmers),onRename:renameLightingGo,onRemove:removeLightingGo,
-     onOpening:openOpeningLook,onExport:openLightingExport,
+     onOpening:openOpeningLook,
     } : null}
     channels={[...tracks.channels].filter(([,channel])=>channel.group===departmentId)} onChannel={chooseChannel}
     pending={drafts} resolution={resolution} onCancelResolution={()=>setResolution(null)} onResolve={resolveDrafts}

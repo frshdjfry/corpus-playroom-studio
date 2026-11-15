@@ -91,6 +91,7 @@ button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-
 .inspector-header { min-height: 37px; padding: 4px var(--panel-inset); }
 .inspector-header h2, .section-title h2 { font: 700 14px system-ui, sans-serif; }
 .inspector-heading-actions { display: flex; align-items: center; gap: 6px; }
+.inspector .lighting-export-action { min-height: 28px; padding: 4px 8px; white-space: nowrap; font-size: 12px; }
 .warning-menu > div { width: min(280px, 80vw); }
 .warning-menu > div > button + button { margin-top: 4px; }
 .stage-return { display: none; }
@@ -199,13 +200,15 @@ button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-
 .timeline-ruler { font-size: 11px; height: 17px; }
 .timeline .event-marker { width: 24px; left: -12px; }
 .timeline-playhead { width: 2px; opacity: 1; }
-.lighting-timeline-actions, .lighting-go-edit { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; padding: 4px 10px; }
-.lighting-timeline-actions button, .lighting-go-edit button { min-height: 30px; padding: 4px 8px; }
+.lighting-timeline-actions { display: grid; grid-template-columns: max-content minmax(0, 420px); align-items: center; gap: 6px 16px; padding: 4px 10px; }
+.lighting-timeline-tools, .lighting-go-edit { display: flex; align-items: center; gap: 6px; }
+.lighting-timeline-tools { flex-wrap: wrap; }
+.lighting-timeline-actions button { flex: none; min-height: 30px; padding: 4px 8px; white-space: nowrap; }
 .lighting-timeline-actions label, .lighting-go-edit label { display: flex; align-items: center; gap: 5px; }
-.lighting-go-edit input { min-height: 30px; width: min(240px, 58vw); padding: 4px 6px; color: #edf4ef; background: #2d353c; border: 1px solid #697982; border-radius: 4px; }
+.lighting-go-edit label { flex: 1; min-width: 0; white-space: nowrap; }
+.lighting-go-edit input { min-height: 30px; width: 100%; min-width: 0; padding: 4px 6px; color: #edf4ef; background: #2d353c; border: 1px solid #697982; border-radius: 4px; }
+.lighting-go-edit input:disabled { opacity: .7; }
 .timeline .remove-lighting-go { color: #ffc4b2; }
-.timeline .lighting-export-action { color: #192321; background: #cee0d5; border-color: #cee0d5; }
-.timeline .lighting-export-action:hover { background: #e0efe6; }
 .timeline .timeline-lane-label { min-width: 0; height: 29px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; text-align: left; font-size: 12px; padding: 5px; border: 1px solid transparent; background: transparent; border-radius: 2px; }
 .timeline .timeline-lane-label:hover { background: #333c42; }
 .timeline .timeline-lane-label:focus-visible { outline-offset: -2px; }
@@ -238,7 +241,13 @@ button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-
   .stage-return { display: inline-block; min-height: 34px; padding: 4px 8px; }
   .workspace #department-inspector { scroll-margin-top: 8px; }
 }
+@media (max-width: 690px) {
+  .lighting-timeline-actions { grid-template-columns: minmax(0, 1fr); }
+}
 @media (max-width: 510px) {
+  .lighting-go-edit label > span { display: none; }
+  .inspector[data-department=lighting] .inspector-heading-actions { flex-wrap: wrap; justify-content: end; }
+  .inspector .lighting-export-action { min-height: 44px; }
   .header { gap: 8px; padding-inline: 10px; }
   .studio-brand { gap: 7px; }
   .studio-mark { width: 25px; height: 25px; }

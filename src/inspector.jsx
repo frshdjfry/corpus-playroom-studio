@@ -81,7 +81,7 @@ export function EntityActions({label,onDuplicate,onRemove,disabled}) {
   </div></details>;
 }
 
-export function Inspector({department, active, onChange, panels, entities, warnings, onWarning, onStage, standalone}) {
+export function Inspector({department, active, onChange, panels, entities, warnings, onWarning, onStage, standalone, headerAction}) {
   const {id: dept, label, tabs} = department;
   const panelId = id => `inspector-panel-${dept}-${id}`;
   const showingStandalone=active===standalone?.id;
@@ -91,6 +91,7 @@ export function Inspector({department, active, onChange, panels, entities, warni
     <div className="inspector-header">
       <h2 id="department-heading">{label}</h2>
       <div className="inspector-heading-actions">
+        {headerAction}
         {warnings.length>0&&<details className="warning-menu"><summary className="inspector-warnings">
           {warnings.length} {warnings.length===1?'warning':'warnings'}
         </summary><div>{warnings.map(issue=><button key={`${issue.id}:${issue.message}`} onClick={event=>{
