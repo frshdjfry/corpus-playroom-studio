@@ -168,6 +168,15 @@ button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-
 .pose-hit { r: 14; }
 .camera-menu { display: none; }
 .view-toolbar .segmented, .lighting-mode { background: #1c2026; }
+.view-toolbar-actions { display: flex; align-items: stretch; gap: 6px; }
+.stage-fullscreen { display: grid; place-items: center; min-width: 38px; min-height: 38px; padding: 0; color: #edf4ef; background: #1c2026; border-color: #697982; }
+.stage-fullscreen:hover { background: #3d464e; }
+body:has(.app[data-stage-expanded]) { overflow: hidden; }
+.app[data-stage-expanded] > :not(.workspace),
+.app[data-stage-expanded] > .workspace > :not(.viewport) { visibility: hidden; }
+.app[data-stage-expanded] dialog[open] { visibility: visible; }
+.app[data-stage-expanded] .viewport { position: fixed; inset: 0; z-index: 20; height: 100dvh; }
+.viewport:fullscreen { width: 100%; height: 100%; }
 .selected-chip { font-size: 12px; background: #252a2e; color: #f0e3c2; }
 .aim-overlay { bottom: 18px; font-size: 12px; }
 
@@ -262,6 +271,7 @@ button:focus-visible, input:focus-visible, select:focus-visible, textarea:focus-
   .view-toolbar .segmented { display: none; }
   .view-toolbar { justify-content: space-between; }
   .lighting-mode button { padding-inline: 6px; }
+  .stage-fullscreen { min-width: 44px; min-height: 44px; }
   .timeline-toolbar { flex-wrap: wrap; }
   .timeline-options select { max-width: 49vw; }
   .track-label strong { overflow-wrap: anywhere; white-space: normal; }

@@ -19,7 +19,7 @@ On your first visit, the viewer opens **Sample Project**, featuring the opening 
 
 Use ⌘Z to undo project edits and ⇧⌘Z to redo them. Each show has its own history while the workspace is open. Text fields use the browser’s editing history while focused.
 
-In Set, use Add object to place a box, cylinder, sphere or sail. Drag the placement dot to move the object or the diamond to rotate it. The Dimensions tab applies to the selected object and includes suspension details for sails. Drag in the 3D view to orbit, scroll to zoom and right-drag to pan. View stores named camera viewpoints for the current project.
+In Set, use Add object to place a box, cylinder, sphere or sail. Drag the placement dot to move the object or the diamond to rotate it. The Dimensions tab applies to the selected object and includes suspension details for sails. Drag in the 3D view to orbit, scroll to zoom and right-drag to pan. Use **Fullscreen stage** beside the lighting controls to expand the stage, then press Escape or use **Exit fullscreen** to return. View stores named camera viewpoints for the current project.
 
 Set, Lighting and Blocking use a persistent strip to choose an entity. In the 3D view, only the active department’s entities show a bright outline on hover and respond to selection. Lighting’s Aim in viewport tool can target stage surfaces.
 

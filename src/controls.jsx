@@ -3,7 +3,8 @@ import React,{useState,useEffect,useId,useRef} from 'react';
 const displayNumber=value=>String(Math.round(value*100)/100);
 export function ControlIcon({kind}) {
  const paths={play:'M4 2l9 6-9 6z',pause:'M5 3v10m6-10v10',previous:'M4 3v10m8-10L6 8l6 5z',next:'M12 3v10M4 3l6 5-6 5z',
-  chevron:'M5 3l5 5-5 5',more:'M3 8h.1m4.9 0h.1m4.9 0h.1'};
+  chevron:'M5 3l5 5-5 5',more:'M3 8h.1m4.9 0h.1m4.9 0h.1',
+  fullscreen:'M2 6V2h4m4 0h4v4m0 4v4h-4m-4 0H2v-4',exitFullscreen:'M2 6h4V2m4 0v4h4m0 4h-4v4m-4 0v-4H2'};
  return <svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true"><path d={paths[kind]}
   fill={kind==='play'?'currentColor':'none'} stroke="currentColor" strokeWidth={kind==='more'?2.1:1.5} strokeLinecap="round" strokeLinejoin="round"/></svg>;
 }

@@ -95,6 +95,39 @@ function Workspace({project,projects,editProject,onHistory,undoTarget,redoTarget
  const canUndo=Boolean(undoTarget);
  const {model,rehearsal,script,views:savedViews}=project;
  const projectMenu=useRef(null);
+ const stageViewport=useRef(null);
+ const fullscreenButton=useRef(null);
+ const [stageMode,setStageMode]=useState(null);
+
+ useEffect(()=>{
+  function syncFullscreen(){
+   const fullscreen=document.fullscreenElement===stageViewport.current;
+   setStageMode(mode=>fullscreen?'fullscreen':mode==='fullscreen'?null:mode);
+  }
+  document.addEventListener('fullscreenchange',syncFullscreen);
+  return ()=>document.removeEventListener('fullscreenchange',syncFullscreen);
+ },[]);
+
+ async function toggleStageFullscreen(){
+  const stage=stageViewport.current;
+  if(document.fullscreenElement===stage){
+   await document.exitFullscreen().catch(()=>{});
+   return;
+  }
+  if(stageMode==='expanded'){
+   setStageMode(null);
+   return;
+  }
+  try{
+   if(document.fullscreenEnabled&&stage.requestFullscreen){
+    await stage.requestFullscreen();
+    return;
+   }
+  }catch{
+   // Embedded browsers can reject native fullscreen.
+  }
+  if(stage.isConnected)setStageMode('expanded');
+ }
  useEffect(()=>{
   function dismissProjectMenu(event){
    const menu=projectMenu.current;
@@ -156,7 +189,7 @@ function Workspace({project,projects,editProject,onHistory,undoTarget,redoTarget
   setCharacterDraft(null);
   clearPlacement();
  };
- const showStage=()=>document.querySelector('.viewport').scrollIntoView({block:'start'});
+ const showStage=()=>stageViewport.current?.scrollIntoView({block:'start'});
  const switchDepartment=(id,reveal=false)=>{
   setDepartmentId(id);setAimLight(null);setCharacterDraft(null);clearPlacement();
   if(reveal&&innerWidth<=860)requestAnimationFrame(()=>document.getElementById('department-inspector')?.scrollIntoView({block:'start'}));
@@ -477,7 +510,10 @@ function Workspace({project,projects,editProject,onHistory,undoTarget,redoTarget
  };
  const finishAim=()=>{
   setAimLight(null);
-  requestAnimationFrame(()=>document.getElementById('aim-in-viewport')?.focus({preventScroll:innerWidth>860}));
+  requestAnimationFrame(()=>{
+   if(stageMode)fullscreenButton.current?.focus();
+   else document.getElementById('aim-in-viewport')?.focus({preventScroll:innerWidth>860});
+  });
  };
  const aimAtPoint=point=>{
   if(aimLight===null)return;
@@ -492,8 +528,17 @@ function Workspace({project,projects,editProject,onHistory,undoTarget,redoTarget
   if(innerWidth<=860)showStage();
  };
  useEffect(()=>{if(aimLight!==null&&!model.lighting.fixtures.some(f=>f.id===aimLight))setAimLight(null);},[model.lighting.fixtures,aimLight]);
- const cancelAimFromKeyboard=useEffectEvent(()=>{if(aimLight!==null)finishAim();});
- useEffect(()=>{const cancel=e=>{if(e.key==='Escape')cancelAimFromKeyboard();};window.addEventListener('keydown',cancel);return()=>window.removeEventListener('keydown',cancel);},[]);
+ const handleStageEscape=useEffectEvent(()=>{
+  if(stageMode==='expanded'){
+   setStageMode(null);
+   fullscreenButton.current?.focus({preventScroll:true});
+  }else if(!stageMode&&aimLight!==null)finishAim();
+ });
+ useEffect(()=>{
+  const cancel=event=>{if(event.key==='Escape'&&!event.defaultPrevented)handleStageEscape();};
+  window.addEventListener('keydown',cancel);
+  return ()=>window.removeEventListener('keydown',cancel);
+ },[]);
  const stageSail=sail && stageModel.sails.find(item=>item.id===sail.id);
  const alerts=useMemo(()=>layoutIssues(model),[model]);
  const support=useMemo(()=>sail && suspensionLayout(model,sail),[model,sail]);
@@ -641,7 +686,8 @@ function Workspace({project,projects,editProject,onHistory,undoTarget,redoTarget
   menu.open=false;
   menu.querySelector('summary').focus();
  }
- return <div className="app" onPointerDownCapture={groupEdits} onFocusCapture={groupEdits}
+ const fullscreenLabel=stageMode?'Exit fullscreen':'Fullscreen stage';
+ return <div className="app" data-stage-expanded={stageMode==='expanded' || undefined} onPointerDownCapture={groupEdits} onFocusCapture={groupEdits}
   onBlurCapture={event=>{if(editGroup.current?.input===event.target)editGroup.current=null;}}>
   <header className="header">
    <div className="studio-brand"><span className="studio-mark" aria-hidden="true"/><span className="studio-name">Corpus Playroom <span>Studio</span></span></div>
@@ -723,16 +769,23 @@ function Workspace({project,projects,editProject,onHistory,undoTarget,redoTarget
      </InspectorSection>
     </>,
    }}/>
-   <section className={`viewport ${aimLight!==null?'aiming':''}`} aria-label="Interactive 3D stage">
+   <section className={`viewport ${aimLight!==null?'aiming':''}`} ref={stageViewport} aria-label="Interactive 3D stage">
     <div className="view-toolbar"><div className="segmented" aria-label="Camera viewpoints">{CAMERA_VIEWS.map(([k,n])=><button key={k} aria-pressed={view.name===k} onClick={()=>preset(k)}>{n}</button>)}</div>
      <select className="camera-menu" aria-label="Camera viewpoint" value={view.name} onChange={event=>preset(event.target.value)}>
       {CAMERA_VIEWS.map(([key,label])=><option key={key} value={key}>{label}</option>)}
       {view.name==='saved'&&<option value="saved" disabled>{view.custom.name}</option>}
      </select>
-     <div className="lighting-mode" role="group" aria-label="Viewport lighting">
-      <button aria-pressed={!neutralView} onClick={()=>setNeutralView(false)}>{stageLightMix>0&&stageLightMix<1?`${Math.round(stageLightMix*100)}% theatre`:'Show lighting'}</button>
-      <button aria-pressed={neutralView} onClick={()=>setNeutralView(true)}>Neutral view</button>
-     </div></div>
+     <div className="view-toolbar-actions">
+      <div className="lighting-mode" role="group" aria-label="Viewport lighting">
+       <button aria-pressed={!neutralView} onClick={()=>setNeutralView(false)}>{stageLightMix>0&&stageLightMix<1?`${Math.round(stageLightMix*100)}% theatre`:'Show lighting'}</button>
+       <button aria-pressed={neutralView} onClick={()=>setNeutralView(true)}>Neutral view</button>
+      </div>
+      <button className="stage-fullscreen" type="button" ref={fullscreenButton} onClick={toggleStageFullscreen}
+       aria-label={fullscreenLabel} title={fullscreenLabel}>
+       <ControlIcon kind={stageMode?'exitFullscreen':'fullscreen'}/>
+      </button>
+     </div>
+    </div>
     <Canvas shadows events={stageEvents} dpr={[1,2]} camera={{position:[-6.5,4.5,7.8],fov:45,near:.03,far:100}} gl={{antialias:true}} onCreated={({gl})=>{gl.setClearColor('#252a30');gl.toneMapping=THREE.ACESFilmicToneMapping;gl.toneMappingExposure=1.2;}} fallback={<div className="canvas-error">This viewer needs a browser with WebGL enabled.</div>}>
      <StageSelection department={departmentId} aiming={aimLight!==null} onSelect={selectStageEntity} onAim={aimAtPoint}>
       {hovered=><>
