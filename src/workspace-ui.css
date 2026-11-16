@@ -28,7 +28,7 @@
 .workspace { height: calc(100dvh - var(--header-height)); }
 .studio-brand { display: flex; align-items: center; gap: 9px; flex: none; color: var(--ink); }
 .studio-mark { display: grid; place-items: center; width: 30px; height: 30px; border-radius: 7px; background: var(--accent); }
-.studio-mark::before { content: ''; width: 14px; height: 14px; border: solid #f5f7ed; border-width: 0 0 3px 3px; }
+.studio-mark::before { content: ''; width: 14px; height: 14px; border: solid #f5f7ed; border-width: 3px 3px 0 0; }
 .studio-name { font-size: 15px; font-weight: 750; letter-spacing: -.02em; line-height: 1.15; white-space: nowrap; }
 .active-project { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .header-menu, .entity-actions, .warning-menu, .scene-menu { position: relative; }
