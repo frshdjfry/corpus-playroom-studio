@@ -6,6 +6,8 @@ import sampleProjectData from './sample-project.js';
 
 export const LIBRARY_KEY = 'corpus-playroom-projects-v1';
 export const SAMPLE_PROJECT_ID = 'sample-project';
+// Bump when publishing a revised bundled sample for returning visitors.
+export const SAMPLE_PROJECT_REVISION = 1;
 const LEGACY_KEY = 'lola-stage-study-v1';
 const PROJECT_FORMAT = 'corpus-playroom-project';
 export const PROJECT_TITLE_LIMIT = 80;
@@ -53,16 +55,33 @@ function validateProject(raw, id) {
   return {
     id, title, model, script, rehearsal, views: savedViews(raw.views),
     ...(raw.example === 'lola' ? {example: 'lola'} : {}),
+    ...(id === SAMPLE_PROJECT_ID && Number.isInteger(raw.sampleRevision) && raw.sampleRevision >= 0
+      ? {sampleRevision: raw.sampleRevision} : {}),
   };
 }
 
 export function createSampleProject() {
-  return validateProject(structuredClone(sampleProjectData), SAMPLE_PROJECT_ID);
+  return {...validateProject(structuredClone(sampleProjectData), SAMPLE_PROJECT_ID), sampleRevision: SAMPLE_PROJECT_REVISION};
 }
 
 export function exportProject(project) {
-  const {id, ...data} = project;
+  const {id, sampleRevision, ...data} = project;
   return {format: PROJECT_FORMAT, version: 1, ...data};
+}
+
+function updateBundledSample(projects) {
+  const previous = projects.find(project => project.id === SAMPLE_PROJECT_ID);
+  if (!previous || previous.sampleRevision >= SAMPLE_PROJECT_REVISION) return projects;
+  const latest = createSampleProject();
+  const updated = projects.map(project => project === previous ? latest : project);
+  // Preserve every differing saved sample, including edits made before versioning.
+  // Revisions are omitted from exports, so an already-current design needs no copy.
+  if (JSON.stringify(exportProject(previous)) !== JSON.stringify(exportProject(latest))) {
+    const {sampleRevision, ...saved} = previous;
+    const suffix = ' (saved copy)';
+    updated.push({...saved, id: projectId(), title: previous.title.slice(0, PROJECT_TITLE_LIMIT - suffix.length) + suffix});
+  }
+  return updated;
 }
 
 export function importProject(raw) {
@@ -78,7 +97,7 @@ export function loadLibrary(storage) {
   };
   const existing = read(LIBRARY_KEY);
   if (existing?.version === 1 && Array.isArray(existing.projects) && existing.projects.length) {
-    const projects = existing.projects.map(project => validateProject(project, project.id));
+    const projects = updateBundledSample(existing.projects.map(project => validateProject(project, project.id)));
     const activeId = projects.some(project => project.id === existing.activeId) ? existing.activeId : projects[0].id;
     return {version: 1, projects, activeId};
   }

@@ -881,7 +881,8 @@ function App(){
  }
  useEffect(()=>{
   try {snapshot.current=localStorage.getItem(LIBRARY_KEY);} catch { /* Report errors when saving. */ }
-  if(!snapshot.current)persist(state.current);
+  // Save startup migrations as well as first-visit defaults, once per revision.
+  if(snapshot.current!==JSON.stringify(state.current))persist(state.current);
   const sync=event=>{
    if(event.key!==LIBRARY_KEY || !event.newValue || unsaved.current)return;
    try {

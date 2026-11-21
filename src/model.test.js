@@ -6,7 +6,7 @@ import {characterJoints,characterLayout,DEFAULT_CHARACTER_COLORS,movePoseJoint,n
 import {characterChannel,sampleRehearsal,validateRehearsal as validateTimeline,compileRehearsal as compileTimeline,removeCharacterKeys,removeFixtureTargets,sailChannel,fixtureChannel,editSailTracks,setKeyframe} from './rehearsal.js';
 import {SCRIPT_LINES} from './sample-script.js';
 import {extendScriptClock,formatTime,parseScript,parseTime,scriptClock} from './script.js';
-import {createProject,createSampleProject,exportProject,importProject,LIBRARY_KEY,loadLibrary,projectClock,replaceProjectScript} from './projects.js';
+import {createProject,createSampleProject,exportProject,importProject,LIBRARY_KEY,loadLibrary,projectClock,replaceProjectScript,SAMPLE_PROJECT_ID,SAMPLE_PROJECT_REVISION} from './projects.js';
 import {recordProjectEdit,stepProjectHistory} from './project-history.js';
 import {cloneDefault,elevations,endpoints,newProp,newSail,sailDimensions,setItems,warnings,validate} from './model.js';
 const clock=scriptClock(SCRIPT_LINES);
@@ -492,6 +492,54 @@ test('first visits open an independent six-light presentation sample',()=>{
  assert.deepEqual(sample.model.lighting.fixtures.map(f=>f.type),['par','par','spotjr','spotjr','par','par']);
  sample.rehearsal.keyframes[sailChannel(2)].length=0;
  assert.equal(loadLibrary(browser).projects[0].rehearsal.keyframes[sailChannel(2)].length,4);
+});
+
+test('returning visitors get the latest sample while older edits and other projects survive',()=>{
+ const older=createSampleProject();
+ delete older.sampleRevision;
+ older.model.lighting.fixtures[0].color='#123456';
+ older.model.sails[0].x=3200;
+ const own=createProject('LOLA');
+ let stored=JSON.stringify({version:1,projects:[older,own],activeId:SAMPLE_PROJECT_ID});
+ const storage={getItem:key=>key===LIBRARY_KEY?stored:null};
+ const updated=loadLibrary(storage);
+ const current=updated.projects.find(p=>p.id===SAMPLE_PROJECT_ID);
+ assert.deepEqual(current,createSampleProject());
+ assert.equal(current.sampleRevision,SAMPLE_PROJECT_REVISION);
+ assert.equal(updated.activeId,SAMPLE_PROJECT_ID);
+ assert.deepEqual(updated.projects.find(p=>p.id===own.id),own);
+ const copy=updated.projects.find(p=>p.id!==SAMPLE_PROJECT_ID&&p.id!==own.id);
+ assert.ok(copy.id);
+ assert.equal(copy.title,'Sample Project (saved copy)');
+ assert.deepEqual(exportProject({...copy,title:older.title}),exportProject(older));
+ assert.equal(copy.sampleRevision,undefined);
+ stored=JSON.stringify(updated);
+ assert.deepEqual(loadLibrary(storage),updated);
+ assert.equal(loadLibrary(storage).projects.length,3);
+ // The same upgrade leaves the user's own active show selected.
+ stored=JSON.stringify({version:1,projects:[older,own],activeId:own.id});
+ assert.equal(loadLibrary(storage).activeId,own.id);
+});
+
+test('sample revision handling avoids duplicate copies and preserves current edits and imported shows',()=>{
+ const current=createSampleProject();
+ const unversioned=structuredClone(current);
+ delete unversioned.sampleRevision;
+ const read=projects=>loadLibrary({getItem:key=>key===LIBRARY_KEY?JSON.stringify({version:1,projects,activeId:projects[0].id}):null});
+ const upgraded=read([unversioned]);
+ assert.equal(upgraded.projects.length,1);
+ assert.deepEqual(upgraded.projects[0],current);
+ const edited=structuredClone(current);
+ edited.model.sails[0].x=3300;
+ assert.deepEqual(read([edited]).projects,[edited]);
+ // A future revision is never replaced by an older app tab.
+ const newer={...edited,sampleRevision:SAMPLE_PROJECT_REVISION+1};
+ assert.deepEqual(read([newer]).projects,[newer]);
+ const imported=importProject(exportProject(edited));
+ assert.equal(imported.sampleRevision,undefined);
+ assert.notEqual(imported.id,SAMPLE_PROJECT_ID);
+ assert.deepEqual(read([imported]).projects,[imported]);
+ assert.equal(exportProject(current).sampleRevision,undefined);
 });
 
 test('sample holds both lighting baselines, fades through black and groups GO markers',()=>{
