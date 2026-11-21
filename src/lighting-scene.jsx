@@ -23,7 +23,7 @@ function Fixture({model,fixture,selected,hovered,theatre,look,showCones,adjustin
  const lit = theatre * level > 0;
  return <>
   <primitive object={target}/>
-  {theatre>0&&fixture.enabled&&<spotLight position={origin} target={target} color={color} intensity={40*theatre*level/100} angle={pose.halfAngle} penumbra={fixture.softness} distance={18} decay={2} castShadow={fixture.shadows} shadow-mapSize={[1024,1024]} shadow-camera-near={.1} shadow-camera-far={18} shadow-normalBias={0} shadow-bias={-.001}/>}
+  {theatre>0&&fixture.enabled&&<spotLight position={origin} target={target} color={color} intensity={40*theatre*level/100} angle={pose.halfAngle} penumbra={fixture.softness} distance={18} decay={2} castShadow={lit&&fixture.shadows} shadow-mapSize={[1024,1024]} shadow-camera-near={.1} shadow-camera-far={18} shadow-normalBias={0} shadow-bias={-.001}/>}
   <group position={origin} userData={{stageEntity:{department:'lighting',id:fixture.id}}}>
    <mesh position={[0,.14,0]}><cylinderGeometry args={[.014,.014,.16,8]}/><meshStandardMaterial color="#252a2f" metalness={.5} roughness={.6}/></mesh>
    <mesh position={[0,.21,0]}><boxGeometry args={[.07,.045,.07]}/><meshStandardMaterial color="#363d42"/></mesh>

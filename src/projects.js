@@ -7,7 +7,7 @@ import sampleProjectData from './sample-project.js';
 export const LIBRARY_KEY = 'corpus-playroom-projects-v1';
 export const SAMPLE_PROJECT_ID = 'sample-project';
 // Bump when publishing a revised bundled sample for returning visitors.
-export const SAMPLE_PROJECT_REVISION = 1;
+export const SAMPLE_PROJECT_REVISION = 2;
 const LEGACY_KEY = 'lola-stage-study-v1';
 const PROJECT_FORMAT = 'corpus-playroom-project';
 export const PROJECT_TITLE_LIMIT = 80;

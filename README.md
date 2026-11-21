@@ -15,7 +15,7 @@ Open http://127.0.0.1:5173. `npm run build` produces a static site in `dist/`. T
 
 ## Projects and set objects
 
-On your first visit, the viewer opens **Sample Project**, featuring the original LOLA excerpt through *Island — The first sleep*, with its script, blocking and set animation. The six-light design shows the Door/South/West PAR trio in cream, amber and cyan, including the passage with three sails raised. During the first sleep, the two LED profiles and centre PAR show orange and pale blue, then a shared blue palette. Lighting changes use three-second fades and labelled GO markers. For the profiles-and-centre look, Sail 3 rises and the cast gathers in an inward-facing kneeling circle around the centre pool. They stand as the blue look fades in. Open the show name in the header to create a project with an empty set and script, open the sample, or import and export shows. Projects stay in the current browser at the current site address and can be exported as JSON files.
+On your first visit, the viewer opens **Sample Project**, featuring the original LOLA excerpt through *Island — The first sleep*, with its script, blocking and set animation. The lighting opens with the back-sail Fresnel, then moves through blue and yellow PARs, two LED profiles with an orange centre Prelude, the same profiles with a blue centre Prelude, and the West Upstage Prelude with all four sails down. The cast kneels in a circle for the orange look and stands during the blue fade. Open the show name in the header to create a project with an empty set and script, open the sample, or import and export shows. Projects stay in the current browser at the current site address and can be exported as JSON files.
 
 The built-in Sample Project updates on reload when a new sample revision is published. A differing saved version is retained as **Sample Project (saved copy)**, including any edits; other projects stay unchanged. Bump `SAMPLE_PROJECT_REVISION` in `src/projects.js` when publishing changes to the bundled sample. Imported copies are independent projects and do not update automatically.
 
@@ -85,7 +85,7 @@ Rigging height defaults to 3200 mm as an editable estimate, not a venue measurem
 
 ## Lighting editor
 
-The Room tab sets the lighting used in Setup and exposes the Theatre blend track in Timeline. Theatre uses the added fixtures plus adjustable ambient fill. Neutral view in the viewport lets you inspect the stage under neutral light independently of the lighting design. The preview supports up to eight fixtures, all optionally shadow-casting.
+The Room tab sets the lighting used in Setup and exposes the Theatre blend track in Timeline. Theatre uses the added fixtures plus adjustable ambient fill. Neutral view in the viewport lets you inspect the stage under neutral light independently of the lighting design. The preview supports up to 16 fixtures, each with its own shadow setting.
 
 Choose a fixture preset from Add light. Drag it onto a bar in Aim or use Exact placement. Fixture positions follow the bars when their height changes. Choose a sail target, aim in the viewport, or edit pan, tilt, and target coordinates. Pan 0° is upstage, 90° is stage-right, and positive tilt points down. Beam angle is the full cone angle. Edge softness changes the penumbra. Dimmer is a relative preview level. Colour previews LED mixing or a tungsten gel. The fixture menu provides duplication and removal, and View contains the beam-guide toggle.
 

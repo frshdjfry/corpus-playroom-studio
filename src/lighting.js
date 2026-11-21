@@ -1,5 +1,5 @@
 import {RIGGING} from './rigging-plan.js';
-export const MAX_LIGHTS=8;
+export const MAX_LIGHTS = 16;
 export const STOCK_URL='https://www.adctheatre.com/media/5833/230817-playroomtechspec.pdf';
 export const FIXTURE_TYPES={
  prelude:{label:'Prelude 28/40 profile',stock:6,minBeam:28,maxBeam:40,beam:32,softness:.08,length:.34,radius:.065,kind:'profile',note:'650 W tungsten profile · hard edge · colour previews a gel.'},
@@ -40,11 +40,15 @@ export function aimFromAngles(model,fixture,pan,tilt){
 export function newFixture(model,type='acclaim',selectedSail=1){
  const id=Math.max(0,...model.lighting.fixtures.map(f=>f.id))+1;
  const sail=model.sails.find(s=>s.id===selectedSail)||model.sails[0];
- return {id,name:`L${id}`,type,bar:'31-36',position:.15+((id-1)%8)*.1,enabled:true,intensity:65,color:'#fff1d6',beam:FIXTURE_TYPES[type].beam,softness:FIXTURE_TYPES[type].softness,shadows:true,aim:{x:sail?.x ?? 2080,y:sail?.y ?? 2515,height:1200}};
+ // Stagger the extra positions between the original eight mounting positions.
+ const slot = (id - 1) % MAX_LIGHTS;
+ const position = .15 + (slot % 8) * .1 + (slot >= 8 ? .05 : 0);
+ return {id,name:`L${id}`,type,bar:'31-36',position,enabled:true,intensity:65,color:'#fff1d6',beam:FIXTURE_TYPES[type].beam,softness:FIXTURE_TYPES[type].softness,shadows:true,aim:{x:sail?.x ?? 2080,y:sail?.y ?? 2515,height:1200}};
 }
 export function validateLighting(raw){
  if(raw===undefined)return defaultLighting();
- if(!raw||!['neutral','theatre'].includes(raw.mode)||!Array.isArray(raw.fixtures)||raw.fixtures.length>MAX_LIGHTS)throw Error('Invalid lighting setup (maximum 8 fixtures).');
+ if(!raw||!['neutral','theatre'].includes(raw.mode)||!Array.isArray(raw.fixtures))throw Error('Invalid lighting setup.');
+ if(raw.fixtures.length>MAX_LIGHTS)throw Error(`A project can have at most ${MAX_LIGHTS} fixtures.`);
  if(typeof raw.ambient!=='number'||!Number.isFinite(raw.ambient)||raw.ambient<0||raw.ambient>.3)throw Error('Invalid theatre ambient fill.');
  const ids=new Set();
  const fixtures=raw.fixtures.map(f=>{

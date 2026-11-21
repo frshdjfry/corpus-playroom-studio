@@ -1,4 +1,4 @@
-// Original LOLA excerpt with six-light looks and the centre-circle blocking transition.
+// Original LOLA excerpt and blocking with five lighting looks from the updated rig.
 export default {
   "format": "corpus-playroom-project",
   "version": 1,
@@ -11,7 +11,7 @@ export default {
     "tieLength": 150,
     "bagHeight": 150,
     "clearance": 50,
-    "riggingHeight": 2600,
+    "riggingHeight": 2800,
     "eyeHeight": 1200,
     "sails": [
       {
@@ -50,33 +50,105 @@ export default {
       "fixtures": [
         {
           "id": 4,
-          "name": "Door LED PAR",
-          "type": "par",
-          "bar": "13-18",
-          "position": 0.35451399534662464,
+          "name": "West Upstage LED Profile",
+          "type": "spotjr",
+          "bar": "1-6",
+          "position": 0.9083354715797078,
           "enabled": true,
-          "intensity": 100,
+          "intensity": 0,
           "color": "#fbf7c6",
-          "beam": 60,
-          "softness": 0.43,
+          "beam": 50,
+          "softness": 0.28,
           "shadows": true,
           "aim": {
-            "x": 3389,
-            "y": 3749,
+            "x": 62,
+            "y": 3273,
+            "height": 1200
+          }
+        },
+        {
+          "id": 9,
+          "name": "West LED PAR",
+          "type": "par",
+          "bar": "1-6",
+          "position": 0.44,
+          "enabled": true,
+          "intensity": 0,
+          "color": "#c7f4ff",
+          "beam": 60,
+          "softness": 0.55,
+          "shadows": true,
+          "aim": {
+            "x": 1351,
+            "y": 1131,
+            "height": 1200
+          }
+        },
+        {
+          "id": 7,
+          "name": "West Downstage LED Profile",
+          "type": "spotjr",
+          "bar": "1-6",
+          "position": 0.1,
+          "enabled": true,
+          "intensity": 0,
+          "color": "#b3c9ff",
+          "beam": 32,
+          "softness": 0.12,
+          "shadows": true,
+          "aim": {
+            "x": 52,
+            "y": 706,
+            "height": 1200
+          }
+        },
+        {
+          "id": 10,
+          "name": "South Middle LED Profile",
+          "type": "spotjr",
+          "bar": "37-42",
+          "position": 0.43,
+          "enabled": true,
+          "intensity": 0,
+          "color": "#b8cdff",
+          "beam": 32,
+          "softness": 0.12,
+          "shadows": true,
+          "aim": {
+            "x": 2990,
+            "y": 2510,
+            "height": 1200
+          }
+        },
+        {
+          "id": 8,
+          "name": "South Right LED PAR",
+          "type": "par",
+          "bar": "37-42",
+          "position": 0.18,
+          "enabled": true,
+          "intensity": 0,
+          "color": "#ffc36b",
+          "beam": 60,
+          "softness": 0.55,
+          "shadows": false,
+          "aim": {
+            "x": 2040,
+            "y": 3180,
             "height": 1200
           }
         },
         {
           "id": 5,
-          "name": "Center LED PAR",
-          "type": "par",
+          "name": "Centre Prelude · Orange gel",
+          "type": "prelude",
           "bar": "19-24",
-          "position": 0.5670656938798212,
+          "position": 0.51,
           "enabled": true,
           "intensity": 0,
           "color": "#ff7b00",
-          "beam": 60,
-          "softness": 0.45,
+          "beam": 40,
+          "softness": 0.12,
           "shadows": true,
           "aim": {
             "x": 2392,
@@ -85,74 +157,56 @@ export default {
           }
         },
         {
-          "id": 6,
-          "name": "South Profile",
-          "type": "spotjr",
-          "bar": "37-42",
-          "position": 0.4692294365748656,
+          "id": 11,
+          "name": "Centre Prelude · Blue gel",
+          "type": "prelude",
+          "bar": "19-24",
+          "position": 0.57,
           "enabled": true,
           "intensity": 0,
-          "color": "#b8cdff",
+          "color": "#719cff",
           "beam": 40,
-          "softness": 0.08,
+          "softness": 0.12,
           "shadows": true,
           "aim": {
-            "x": 2609,
-            "y": 1769,
-            "height": 1200
+            "x": 2392,
+            "y": 2696,
+            "height": 0
           }
         },
         {
-          "id": 7,
-          "name": "West Profile",
-          "type": "spotjr",
-          "bar": "1-6",
-          "position": 0.5163112634760547,
+          "id": 12,
+          "name": "West Upstage Prelude",
+          "type": "prelude",
+          "bar": "7-12",
+          "position": 0.9868665985127133,
           "enabled": true,
           "intensity": 0,
-          "color": "#b3c9ff",
-          "beam": 29.5,
+          "color": "#fff1d6",
+          "beam": 32,
           "softness": 0.08,
           "shadows": true,
           "aim": {
-            "x": 1693,
-            "y": 2638,
+            "x": 2374,
+            "y": 3084,
             "height": 1200
           }
         },
         {
-          "id": 8,
-          "name": "South LED PAR",
-          "type": "par",
-          "bar": "31-36",
-          "position": 0.882429148866108,
+          "id": 13,
+          "name": "Back Sails Fresnel ",
+          "type": "acclaim",
+          "bar": "25-30",
+          "position": 0.8643238587088576,
           "enabled": true,
-          "intensity": 100,
-          "color": "#ffc36b",
+          "intensity": 65,
+          "color": "#fff1d6",
           "beam": 60,
-          "softness": 0.55,
-          "shadows": false,
-          "aim": {
-            "x": 1011,
-            "y": 1652,
-            "height": 1200
-          }
-        },
-        {
-          "id": 9,
-          "name": "West LED PAR",
-          "type": "par",
-          "bar": "7-12",
-          "position": 0.18973856117612037,
-          "enabled": true,
-          "intensity": 100,
-          "color": "#c7f4ff",
-          "beam": 60,
-          "softness": 0.55,
+          "softness": 0.8,
           "shadows": true,
           "aim": {
-            "x": 1351,
-            "y": 1131,
+            "x": 1349,
+            "y": 1308,
             "height": 1200
           }
         }
@@ -1140,7 +1194,18 @@ export default {
     ],
     "tracks": {
       "set": [],
-      "lighting": []
+      "lighting": [
+        {
+          "moment": "line-1",
+          "label": "Back sails Fresnel",
+          "duration": 0,
+          "target": {
+            "mode": "theatre",
+            "ambient": 0.11,
+            "fixtures": {}
+          }
+        }
+      ]
     },
     "keyframes": {
       "sail:2:raise": [
@@ -1200,6 +1265,16 @@ export default {
           "time": 451.9,
           "value": 1,
           "curve": "linear"
+        },
+        {
+          "time": 484.9,
+          "value": 1,
+          "curve": "hold"
+        },
+        {
+          "time": 487.9,
+          "value": 0,
+          "curve": "linear"
         }
       ],
       "sail:4:raise": [
@@ -1217,6 +1292,16 @@ export default {
           "time": 79.5,
           "value": 1,
           "curve": "linear"
+        },
+        {
+          "time": 484.9,
+          "value": 1,
+          "curve": "hold"
+        },
+        {
+          "time": 487.9,
+          "value": 0,
+          "curve": "linear"
         }
       ],
       "sail:5:raise": [
@@ -1233,6 +1318,16 @@ export default {
         {
           "time": 79.5,
           "value": 1,
+          "curve": "linear"
+        },
+        {
+          "time": 484.9,
+          "value": 1,
+          "curve": "hold"
+        },
+        {
+          "time": 487.9,
+          "value": 0,
           "curve": "linear"
         }
       ],
@@ -2618,293 +2713,6 @@ export default {
           "curve": "linear"
         }
       ],
-      "lighting:mix": [
-        {
-          "time": 0,
-          "value": 1,
-          "curve": "hold"
-        }
-      ],
-      "lighting:ambient": [
-        {
-          "time": 0,
-          "value": 0,
-          "curve": "linear"
-        },
-        {
-          "time": 3,
-          "value": 0.11,
-          "curve": "linear"
-        },
-        {
-          "time": 448.9,
-          "value": 0.11,
-          "curve": "hold"
-        },
-        {
-          "time": 451.9,
-          "value": 0,
-          "curve": "linear"
-        },
-        {
-          "time": 454.9,
-          "value": 0.11,
-          "curve": "linear"
-        },
-        {
-          "time": 465.2,
-          "value": 0.11,
-          "curve": "hold"
-        },
-        {
-          "time": 468.2,
-          "value": 0,
-          "curve": "linear"
-        },
-        {
-          "time": 471.2,
-          "value": 0.11,
-          "curve": "linear"
-        },
-        {
-          "time": 484.9,
-          "value": 0.11,
-          "curve": "hold"
-        },
-        {
-          "time": 487.9,
-          "value": 0,
-          "curve": "linear"
-        }
-      ],
-      "light:4:level": [
-        {
-          "time": 0,
-          "value": 0,
-          "curve": "linear"
-        },
-        {
-          "time": 3,
-          "value": 100,
-          "curve": "linear"
-        },
-        {
-          "time": 448.9,
-          "value": 100,
-          "curve": "hold"
-        },
-        {
-          "time": 451.9,
-          "value": 0,
-          "curve": "linear"
-        }
-      ],
-      "light:5:level": [
-        {
-          "time": 0,
-          "value": 0,
-          "curve": "linear"
-        },
-        {
-          "time": 451.9,
-          "value": 0,
-          "curve": "linear"
-        },
-        {
-          "time": 454.9,
-          "value": 100,
-          "curve": "linear"
-        },
-        {
-          "time": 465.2,
-          "value": 100,
-          "curve": "hold"
-        },
-        {
-          "time": 468.2,
-          "value": 0,
-          "curve": "linear"
-        },
-        {
-          "time": 471.2,
-          "value": 100,
-          "curve": "linear"
-        },
-        {
-          "time": 484.9,
-          "value": 100,
-          "curve": "hold"
-        },
-        {
-          "time": 487.9,
-          "value": 0,
-          "curve": "linear"
-        }
-      ],
-      "light:5:color": [
-        {
-          "time": 0,
-          "value": "#ff7b00",
-          "curve": "hold"
-        },
-        {
-          "time": 468.2,
-          "value": "#719cff",
-          "curve": "hold"
-        }
-      ],
-      "light:6:level": [
-        {
-          "time": 0,
-          "value": 0,
-          "curve": "linear"
-        },
-        {
-          "time": 451.9,
-          "value": 0,
-          "curve": "linear"
-        },
-        {
-          "time": 454.9,
-          "value": 31,
-          "curve": "linear"
-        },
-        {
-          "time": 465.2,
-          "value": 31,
-          "curve": "hold"
-        },
-        {
-          "time": 468.2,
-          "value": 0,
-          "curve": "linear"
-        },
-        {
-          "time": 471.2,
-          "value": 31,
-          "curve": "linear"
-        },
-        {
-          "time": 484.9,
-          "value": 31,
-          "curve": "hold"
-        },
-        {
-          "time": 487.9,
-          "value": 0,
-          "curve": "linear"
-        }
-      ],
-      "light:6:color": [
-        {
-          "time": 0,
-          "value": "#b8cdff",
-          "curve": "hold"
-        },
-        {
-          "time": 468.2,
-          "value": "#719cff",
-          "curve": "hold"
-        }
-      ],
-      "light:7:level": [
-        {
-          "time": 0,
-          "value": 0,
-          "curve": "linear"
-        },
-        {
-          "time": 451.9,
-          "value": 0,
-          "curve": "linear"
-        },
-        {
-          "time": 454.9,
-          "value": 48,
-          "curve": "linear"
-        },
-        {
-          "time": 465.2,
-          "value": 48,
-          "curve": "hold"
-        },
-        {
-          "time": 468.2,
-          "value": 0,
-          "curve": "linear"
-        },
-        {
-          "time": 471.2,
-          "value": 48,
-          "curve": "linear"
-        },
-        {
-          "time": 484.9,
-          "value": 48,
-          "curve": "hold"
-        },
-        {
-          "time": 487.9,
-          "value": 0,
-          "curve": "linear"
-        }
-      ],
-      "light:7:color": [
-        {
-          "time": 0,
-          "value": "#b3c9ff",
-          "curve": "hold"
-        },
-        {
-          "time": 468.2,
-          "value": "#719cff",
-          "curve": "hold"
-        }
-      ],
-      "light:8:level": [
-        {
-          "time": 0,
-          "value": 0,
-          "curve": "linear"
-        },
-        {
-          "time": 3,
-          "value": 100,
-          "curve": "linear"
-        },
-        {
-          "time": 448.9,
-          "value": 100,
-          "curve": "hold"
-        },
-        {
-          "time": 451.9,
-          "value": 0,
-          "curve": "linear"
-        }
-      ],
-      "light:9:level": [
-        {
-          "time": 0,
-          "value": 0,
-          "curve": "linear"
-        },
-        {
-          "time": 3,
-          "value": 100,
-          "curve": "linear"
-        },
-        {
-          "time": 448.9,
-          "value": 100,
-          "curve": "hold"
-        },
-        {
-          "time": 451.9,
-          "value": 0,
-          "curve": "linear"
-        }
-      ],
       "character:1:direction": [
         {
           "time": 451.9,
@@ -3190,44 +2998,261 @@ export default {
           "value": 0,
           "curve": "linear"
         }
+      ],
+      "light:4:level": [
+        {
+          "time": 0,
+          "value": 0,
+          "curve": "hold"
+        }
+      ],
+      "light:9:level": [
+        {
+          "time": 0,
+          "value": 0,
+          "curve": "hold"
+        },
+        {
+          "time": 21.5,
+          "value": 0,
+          "curve": "hold"
+        },
+        {
+          "time": 24.5,
+          "value": 100,
+          "curve": "linear"
+        },
+        {
+          "time": 451.9,
+          "value": 100,
+          "curve": "hold"
+        },
+        {
+          "time": 454.9,
+          "value": 0,
+          "curve": "linear"
+        }
+      ],
+      "light:7:level": [
+        {
+          "time": 0,
+          "value": 0,
+          "curve": "hold"
+        },
+        {
+          "time": 451.9,
+          "value": 0,
+          "curve": "hold"
+        },
+        {
+          "time": 454.9,
+          "value": 48,
+          "curve": "linear"
+        },
+        {
+          "time": 487.9,
+          "value": 48,
+          "curve": "hold"
+        },
+        {
+          "time": 490.9,
+          "value": 0,
+          "curve": "linear"
+        }
+      ],
+      "light:7:color": [
+        {
+          "time": 0,
+          "value": "#b3c9ff",
+          "curve": "hold"
+        },
+        {
+          "time": 468.2,
+          "value": "#b3c9ff",
+          "curve": "hold"
+        },
+        {
+          "time": 471.2,
+          "value": "#719cff",
+          "curve": "linear"
+        }
+      ],
+      "light:10:level": [
+        {
+          "time": 0,
+          "value": 0,
+          "curve": "hold"
+        },
+        {
+          "time": 451.9,
+          "value": 0,
+          "curve": "hold"
+        },
+        {
+          "time": 454.9,
+          "value": 17.1,
+          "curve": "linear"
+        },
+        {
+          "time": 487.9,
+          "value": 17.1,
+          "curve": "hold"
+        },
+        {
+          "time": 490.9,
+          "value": 0,
+          "curve": "linear"
+        }
+      ],
+      "light:10:color": [
+        {
+          "time": 0,
+          "value": "#b8cdff",
+          "curve": "hold"
+        },
+        {
+          "time": 468.2,
+          "value": "#b8cdff",
+          "curve": "hold"
+        },
+        {
+          "time": 471.2,
+          "value": "#719cff",
+          "curve": "linear"
+        }
+      ],
+      "light:8:level": [
+        {
+          "time": 0,
+          "value": 0,
+          "curve": "hold"
+        },
+        {
+          "time": 21.5,
+          "value": 0,
+          "curve": "hold"
+        },
+        {
+          "time": 24.5,
+          "value": 100,
+          "curve": "linear"
+        },
+        {
+          "time": 451.9,
+          "value": 100,
+          "curve": "hold"
+        },
+        {
+          "time": 454.9,
+          "value": 0,
+          "curve": "linear"
+        }
+      ],
+      "light:5:level": [
+        {
+          "time": 0,
+          "value": 0,
+          "curve": "hold"
+        },
+        {
+          "time": 451.9,
+          "value": 0,
+          "curve": "hold"
+        },
+        {
+          "time": 454.9,
+          "value": 100,
+          "curve": "linear"
+        },
+        {
+          "time": 468.2,
+          "value": 100,
+          "curve": "hold"
+        },
+        {
+          "time": 471.2,
+          "value": 0,
+          "curve": "linear"
+        }
+      ],
+      "light:11:level": [
+        {
+          "time": 0,
+          "value": 0,
+          "curve": "hold"
+        },
+        {
+          "time": 468.2,
+          "value": 0,
+          "curve": "hold"
+        },
+        {
+          "time": 471.2,
+          "value": 100,
+          "curve": "linear"
+        },
+        {
+          "time": 487.9,
+          "value": 100,
+          "curve": "hold"
+        },
+        {
+          "time": 490.9,
+          "value": 0,
+          "curve": "linear"
+        }
+      ],
+      "light:12:level": [
+        {
+          "time": 0,
+          "value": 0,
+          "curve": "hold"
+        },
+        {
+          "time": 487.9,
+          "value": 0,
+          "curve": "hold"
+        },
+        {
+          "time": 490.9,
+          "value": 65,
+          "curve": "linear"
+        }
+      ],
+      "light:13:level": [
+        {
+          "time": 0,
+          "value": 65,
+          "curve": "hold"
+        },
+        {
+          "time": 21.5,
+          "value": 65,
+          "curve": "hold"
+        },
+        {
+          "time": 24.5,
+          "value": 0,
+          "curve": "linear"
+        }
       ]
     },
     "lightingCues": [
       {
-        "time": 0,
-        "label": "PAR trio - three sails raised",
-        "kept": true,
-        "dimmer": true
-      },
-      {
-        "time": 448.9,
-        "label": "Fade out - PAR trio",
-        "kept": true,
-        "dimmer": true
+        "time": 21.5,
+        "label": "Blue and yellow PARs"
       },
       {
         "time": 451.9,
-        "label": "Profiles + centre - orange and ice",
-        "kept": true,
-        "dimmer": true
-      },
-      {
-        "time": 465.2,
-        "label": "Fade out - orange and ice",
-        "kept": true,
-        "dimmer": true
+        "label": "Two spots + orange centre"
       },
       {
         "time": 468.2,
-        "label": "Profiles + centre - blue",
-        "kept": true,
-        "dimmer": true
+        "label": "Two spots + blue centre"
       },
       {
-        "time": 484.9,
-        "label": "Fade to black",
-        "kept": true,
-        "dimmer": true
+        "time": 487.9,
+        "label": "West upstage Prelude - sails down"
       }
     ]
   },
