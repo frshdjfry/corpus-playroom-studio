@@ -15,7 +15,7 @@ Open http://127.0.0.1:5173. `npm run build` produces a static site in `dist/`. T
 
 ## Projects and set objects
 
-On your first visit, the viewer opens **Sample Project**, featuring the opening of LOLA through *Island — The first sleep*. Open the show name in the header to create a project with an empty set and script, open the sample, or import and export shows. Projects stay in the current browser at the current site address and can be exported as JSON files.
+On your first visit, the viewer opens **Sample Project**, featuring the original LOLA excerpt through *Island — The first sleep*, with its script, blocking and set animation. The six-light design shows the Door/South/West PAR trio in cream, amber and cyan, including the passage with three sails raised. During the first sleep, the two LED profiles and centre PAR show orange and pale blue, then a shared blue palette. Lighting changes use three-second fades and labelled GO markers. For the profiles-and-centre look, Sail 3 rises and the cast gathers in an inward-facing kneeling circle around the centre pool. They stand as the blue look fades in. Open the show name in the header to create a project with an empty set and script, open the sample, or import and export shows. Projects stay in the current browser at the current site address and can be exported as JSON files. Existing saved projects keep their designs when the bundled sample changes.
 
 Use ⌘Z to undo project edits and ⇧⌘Z to redo them. Each show has its own history while the workspace is open. Text fields use the browser’s editing history while focused.
 

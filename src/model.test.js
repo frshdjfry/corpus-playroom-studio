@@ -2,11 +2,11 @@ import {test} from 'node:test';
 import assert from 'node:assert/strict';
 import {mountAtPoint,newFixture} from './lighting.js';
 import {lightingChanges,lightingTimelineCues,planLightingExport,preserveLightingGos,writeLightingAscii} from './lighting-export.js';
-import {characterJoints,characterLayout,DEFAULT_CHARACTER_COLORS,movePoseJoint,neutralPose,newCharacter,STANDING_SPAN} from './characters.js';
+import {characterJoints,characterLayout,DEFAULT_CHARACTER_COLORS,movePoseJoint,neutralPose,newCharacter,POSE_PRESETS,STANDING_SPAN} from './characters.js';
 import {characterChannel,sampleRehearsal,validateRehearsal as validateTimeline,compileRehearsal as compileTimeline,removeCharacterKeys,removeFixtureTargets,sailChannel,fixtureChannel,editSailTracks,setKeyframe} from './rehearsal.js';
 import {SCRIPT_LINES} from './sample-script.js';
 import {extendScriptClock,formatTime,parseScript,parseTime,scriptClock} from './script.js';
-import {createProject,exportProject,importProject,LIBRARY_KEY,loadLibrary,projectClock,replaceProjectScript} from './projects.js';
+import {createProject,createSampleProject,exportProject,importProject,LIBRARY_KEY,loadLibrary,projectClock,replaceProjectScript} from './projects.js';
 import {recordProjectEdit,stepProjectHistory} from './project-history.js';
 import {cloneDefault,elevations,endpoints,newProp,newSail,sailDimensions,setItems,warnings,validate} from './model.js';
 const clock=scriptClock(SCRIPT_LINES);
@@ -478,18 +478,79 @@ test('project library carries the existing LOLA design and can open an independe
  assert.deepEqual(exportProject(imported),exportProject(newShow));
 });
 
-test('first visits open an editable sample that ends with the first sleep',()=>{
+test('first visits open an independent six-light presentation sample',()=>{
  const browser={getItem:()=>null};
  const {activeId,projects:[sample]}=loadLibrary(browser);
  assert.equal(sample.id,activeId);
  assert.equal(sample.title,'Sample Project');
- assert.deepEqual(sample.rehearsal.scenes.map(scene=>scene.title),['Island — Arrival','Island — The first sleep']);
+ assert.deepEqual(sample.rehearsal.scenes.map(scene=>scene.title),[
+  'Island — Arrival','Island — The first sleep',
+ ]);
  assert.equal(sample.script.lines.length,173);
  assert.equal(projectClock(sample).duration,604.3);
- assert.deepEqual([sample.model.sails.length,sample.model.props.length,sample.model.lighting.fixtures.length,sample.model.characters.length],[4,1,4,4]);
- assert.equal(Object.values(sample.rehearsal.keyframes).flat().length,50);
+ assert.deepEqual([sample.model.sails.length,sample.model.props.length,sample.model.lighting.fixtures.length,sample.model.characters.length],[4,1,6,4]);
+ assert.deepEqual(sample.model.lighting.fixtures.map(f=>f.type),['par','par','spotjr','spotjr','par','par']);
  sample.rehearsal.keyframes[sailChannel(2)].length=0;
- assert.equal(Object.values(loadLibrary(browser).projects[0].rehearsal.keyframes).flat().length,50);
+ assert.equal(loadLibrary(browser).projects[0].rehearsal.keyframes[sailChannel(2)].length,4);
+});
+
+test('sample holds both lighting baselines, fades through black and groups GO markers',()=>{
+ const sample=createSampleProject();
+ const fixtures=sample.model.lighting.fixtures;
+ const compiled=compileTimeline(sample.model,sample.rehearsal,projectClock(sample));
+ const levels=time=>Object.values(compiled.lighting(time).fixtures).map(f=>f.level);
+ assert.deepEqual(levels(8),[100,0,0,0,100,100]);
+ assert.deepEqual(levels(458),[0,100,31,48,0,0]);
+ assert.deepEqual(levels(477),[0,100,31,48,0,0]);
+ assert.deepEqual([5,6,7].map(id=>compiled.lighting(458).fixtures[id].color),['#ff7b00','#b8cdff','#b3c9ff']);
+ assert.deepEqual([5,6,7].map(id=>compiled.lighting(477).fixtures[id].color),['#719cff','#719cff','#719cff']);
+ assert.deepEqual(levels(1.5),[50,0,0,0,50,50]);
+ for(const [actual,expected]of levels(450.4).map((v,i)=>[v,[50,0,0,0,50,50][i]]))assert.ok(Math.abs(actual-expected)<1e-9);
+ for(const [actual,expected]of levels(453.4).map((v,i)=>[v,[0,50,15.5,24,0,0][i]]))assert.ok(Math.abs(actual-expected)<1e-9);
+ for(const time of [0,451.9,468.2,487.9]){
+  assert.ok(levels(time).every(level=>level===0));
+  assert.equal(compiled.lighting(time).ambient,0);
+ }
+ assert.deepEqual(compiled.set(0),[0,0,0,0]);
+ assert.deepEqual(compiled.set(250),[0,1,1,1]);
+ assert.deepEqual(levels(250),[100,0,0,0,100,100]);
+ assert.deepEqual(compiled.set(500),[0,1,1,1]);
+ const changes=lightingChanges(fixtures,compiled);
+ const plan=planLightingExport(fixtures,compiled,sample.rehearsal.lightingCues);
+ const cues=lightingTimelineCues(changes,sample.rehearsal.lightingCues,plan,new Map());
+ assert.deepEqual(cues.map(c=>c.time),[0,448.9,451.9,465.2,468.2,484.9]);
+ assert.deepEqual(cues.map(c=>c.label),sample.rehearsal.lightingCues.map(c=>c.label));
+ assert.ok(plan.every(c=>c.issues.length===0));
+ assert.equal(compiled.blocking(8).length,4);
+});
+
+test('sample gathers the cast around the centre PAR, then stands them with the blue look',()=>{
+ const sample=createSampleProject();
+ const compiled=compileTimeline(sample.model,sample.rehearsal,projectClock(sample));
+ const centre=sample.model.lighting.fixtures.find(f=>f.name==='Center LED PAR').aim;
+ const kneeling=POSE_PRESETS.find(p=>p.id==='kneeling').pose;
+ const standing=POSE_PRESETS.find(p=>p.id==='standing').pose;
+ const before=compiled.blocking(451.9);
+ assert.notDeepEqual(compiled.blocking(453.4).map(c=>[c.x,c.y]),before.map(c=>[c.x,c.y]));
+ for(const actor of compiled.blocking(458)){
+  const dx=centre.x-actor.x,dy=centre.y-actor.y;
+  const angle=actor.direction*Math.PI/180;
+  assert.ok(Math.abs(Math.hypot(dx,dy)-700)<1e-7);
+  assert.ok(Math.abs(Math.sin(angle)-dx/700)<1e-7);
+  assert.ok(Math.abs(-Math.cos(angle)-dy/700)<1e-7);
+  assert.equal(actor.elevation,0);
+  assert.deepEqual(actor.pose,kneeling);
+ }
+ assert.equal(compiled.value(sailChannel(3),448.9),0);
+ assert.ok(Math.abs(compiled.value(sailChannel(3),450.4)-.5)<1e-9);
+ assert.equal(compiled.value(sailChannel(3),451.9),1);
+ assert.deepEqual(compiled.blocking(468.2).map(c=>c.pose),Array(4).fill(kneeling));
+ const risen=compiled.blocking(471.2);
+ assert.deepEqual(risen.map(c=>c.pose),Array(4).fill(standing));
+ assert.deepEqual(risen.map(c=>[c.x,c.y,c.direction,c.elevation]),compiled.blocking(458).map(c=>[c.x,c.y,c.direction,c.elevation]));
+ assert.notDeepEqual(compiled.blocking(469.7)[0].pose,kneeling);
+ assert.notDeepEqual(compiled.blocking(469.7)[0].pose,standing);
+ assert.deepEqual([5,6,7].map(id=>compiled.lighting(471.2).fixtures[id].color),Array(3).fill('#719cff'));
 });
 
 test('pasted lines keep matching scene anchors and existing keyframe times',()=>{
